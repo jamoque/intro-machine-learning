@@ -13,6 +13,9 @@
 """    
 
 
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import accuracy_score
+from time import time
 import sys
 import pickle
 sys.path.append("../tools/")
@@ -37,7 +40,16 @@ test_color = "b"
 ### Please name it reg, so that the plotting code below picks it up and 
 ### plots it correctly. Don't forget to change the test_color above from "b" to
 ### "r" to differentiate training points from test points.
-
+reg = LinearRegression()
+print "Training Linear Regression..."
+t0 = time()
+reg.fit(feature_train, target_train)
+print "Training completed in: ", round(time()-t0, 3), "sec"
+slope = reg.coef_
+intercept = reg.intercept_
+print "Slope: " + str(slope) + "\tIntercept: " + str(intercept)
+r_squared = reg.score(feature_test, target_test)
+print "R Squared: " + str(round(r_squared, 3))
 
 
 
@@ -62,6 +74,11 @@ plt.scatter(feature_test[0], target_test[0], color=train_color, label="train")
 ### draw the regression line, once it's coded
 try:
     plt.plot( feature_test, reg.predict(feature_test) )
+    reg.fit(feature_test, target_test)
+    slope = reg.coef_
+    intercept = reg.intercept_
+    print "Slope: " + str(slope) + "\tIntercept: " + str(intercept)
+    plt.plot(feature_train, reg.predict(feature_train), color="b") 
 except NameError:
     pass
 plt.xlabel(features_list[1])
