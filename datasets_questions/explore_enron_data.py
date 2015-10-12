@@ -18,5 +18,22 @@
 import pickle
 
 enron_data = pickle.load(open("../final_project/final_project_dataset.pkl", "r"))
+enron_data.pop('TOTAL', 0)
 
+max_stock_options_exercised = 0
+min_stock_options_exercised = 2 ** 32
 
+feature = "salary"
+
+for person in enron_data:
+	try:
+		if int(enron_data[person][feature]) > max_stock_options_exercised:
+			max_stock_options_exercised = int(enron_data[person][feature])
+		if int(enron_data[person][feature]) < min_stock_options_exercised:
+			min_stock_options_exercised = int(enron_data[person][feature])
+	except Exception, e:
+		# Skip all 'NaN' entries
+		pass
+
+print "MAX: " + str(max_stock_options_exercised)
+print "MIN: " + str(min_stock_options_exercised)
